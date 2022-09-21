@@ -116,13 +116,5 @@ async def count(ctx):
 
     await ctx.send("Dr.Freeman, " + str(online) + " of the citizen's of City 17 are online, " + str(idle) + " are idle, " + str(off) + " are offline and " + str(dnd) + " should not be disturb")
 
-@client.command(name="poll")
-async def poll(ctx, question: str):
-    """
-    :param ctx:
-    :return:
-    """
-    await ctx.send(question)
-
 
 client.run(os.getenv("TOKEN"))  # Starts the bot
