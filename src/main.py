@@ -52,7 +52,7 @@ async def name_back(ctx):
 
 
 @client.command(name="d6")
-async def name_back(ctx):
+async def random(ctx):
     """
     When you do "!d6" command, return a value between 1 and 6
     :param ctx:
@@ -71,10 +71,16 @@ async def give_admin(ctx, name: str):
     :return:
     """
     print("hey")
-    perms = discord.Permissions(administator=True)
-    await ctx.guild.create_role(name="admin", permissions=perms)
-    role = discord.utils.get(ctx.message.author.server.roles, name="admin")
-    await client.add_roles(name, role)
+
+    user = ctx.message.author
+    if discord.utils.get(user.guild.roles, name="admin") == None:
+        print("Creating role admin")
+        perms = discord.Permissions(administrator=True)
+        await ctx.guild.create_role(name="admin", permissions=perms)
+    else:
+        print("Role admin already exist")
+    role = discord.utils.get(user.guild.roles, name="admin")
+    await user.add_roles(role)
 
 
 
