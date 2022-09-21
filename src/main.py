@@ -20,7 +20,7 @@ client = commands.Bot(
 )
 
 client.author_id = 436535678185111553  # Change to your discord id
-
+intents.presences=True
 
 @client.event
 async def on_ready():  # When the bot is ready
@@ -70,8 +70,6 @@ async def give_admin(ctx, name: str):
     :param ctx:
     :return:
     """
-    print("hey")
-
     user = ctx.message.author
     if discord.utils.get(user.guild.roles, name="admin") == None:
         print("Creating role admin")
@@ -83,7 +81,44 @@ async def give_admin(ctx, name: str):
     await user.add_roles(role)
 
 
+@client.command(name="ban")
+async def ban(ctx, name: str):
+    """
+    :param ctx:
+    :return:
+    """
+    user = ctx.message.author
+    await user.ban(reason=None)
 
+
+#!count the bot should write back for each possible status (Online, Offline, Idle, Do not disturb) the number of members
+#(including yourself) in the server with that status
+
+#Example : "3 members are online, 2 are idle and 4 are off"
+#Extra mile : Instead of counting the members, list them sorted by status
+@client.command(name="count")
+async def count(ctx):
+    """
+    :param ctx:
+    :return:
+    """
+    members = ctx.guild.members
+    online = 0
+    idle = 0
+    off = 0
+    dnd = 0
+    for member in members:
+        if member.status.name == "online":
+            online += 1
+        elif member.status.name == "idle":
+            idle += 1
+        elif member.status.name == "offline":
+            off += 1
+        elif member.status.name == "dnd":
+            dnd += 1
+
+    general_channel = client.get_channel(general_chan)
+    await general_channel.send("Dr.Freeman, " + str(online) + " of the citizen's of City 17 are online, " + str(idle) + " are idle, " + str(off) + " are offline and " + str(dnd) + " should not be disturb")
 
 
 client.run(os.getenv("TOKEN"))  # Starts the bot
