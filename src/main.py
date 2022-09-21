@@ -1,12 +1,8 @@
-import json
-import random
-import subprocess
-import urllib
-
 from discord.ext import commands
 from dotenv import load_dotenv
 import discord
 import os
+import random
 
 load_dotenv(dotenv_path="../config")
 os.getenv("TOKEN")
@@ -21,16 +17,16 @@ client = commands.Bot(
 )
 
 client.author_id = 436535678185111553  # Change to your discord id
-intents.presences=True
+intents.presences = True
+
 
 @client.event
 async def on_ready():  # When the bot is ready
     print("Rise and shine, Mister Freeman. Rise and... shine")
-    general_channel = client.get_channel(1022194900982308977) #TODO ID to replace with the ID of a saloon
+    general_channel = client.get_channel(1022194900982308977)  # TODO ID to replace with the ID of a saloon
     await general_channel.send("Rise and shine, Mister Freeman. Rise and... shine")
     await general_channel.send(client.user)
     print(client.user)  # Prints the bot's username and identifier
-
 
 
 @client.event
@@ -68,11 +64,12 @@ async def random(ctx):
 @client.command(name="admin")
 async def give_admin(ctx, name: str):
     """
-    :param ctx:
+    Give a user admin role, create admin role if it doesn't exist
+    :param name: The name of the one we want to add the role on
     :return:
     """
-    user = ctx.message.author
-    if discord.utils.get(user.guild.roles, name="admin") == None:
+    user = discord.utils.get(ctx.guild.members, name=name)
+    if discord.utils.get(user.guild.roles, name="admin") is None:
         print("Creating role admin")
         perms = discord.Permissions(administrator=True)
         await ctx.guild.create_role(name="admin", permissions=perms)
@@ -85,10 +82,11 @@ async def give_admin(ctx, name: str):
 @client.command(name="ban")
 async def ban(ctx, name: str):
     """
-    :param ctx:
+    Ban someone by his name
+    :param name: The name of the one's we want to ban
     :return:
     """
-    user = ctx.message.author
+    user = discord.utils.get(ctx.guild.members, name=name)
     await user.ban(reason=None)
 
 
@@ -114,7 +112,9 @@ async def count(ctx):
         elif member.status.name == "dnd":
             dnd += 1
 
-    await ctx.send("Dr.Freeman, " + str(online) + " of the citizen's of City 17 are online, " + str(idle) + " are idle, " + str(off) + " are offline and " + str(dnd) + " should not be disturb")
+    await ctx.send(
+        "Dr.Freeman, " + str(online) + " of the citizen's of City 17 are online, " + str(idle) + " are idle, " + str(
+            off) + " are offline and " + str(dnd) + " should not be disturb")
 
 
 client.run(os.getenv("TOKEN"))  # Starts the bot
