@@ -49,4 +49,10 @@ async def name_back(ctx):
     await general_channel.send("The result of your d6 is " + str(result) + " Dr.Freeman")
     return result
 
+@client.event
+async def on_message(message):
+    if message.content == "Salut tout le monde":
+        await message.channel.send("Salut tout seul")
+        await message.channel.send(message.author.mention)
+
 client.run(os.getenv("TOKEN"))  # Starts the bot
