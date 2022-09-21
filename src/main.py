@@ -1,3 +1,5 @@
+import random
+
 from discord.ext import commands
 from dotenv import load_dotenv
 import discord
@@ -5,6 +7,8 @@ import os
 
 load_dotenv(dotenv_path="../config")
 os.getenv("TOKEN")
+
+general_chan = 1022194900982308977 # The chan on witch you want your bot to write on
 
 intents = discord.Intents.default()
 intents.members = True
@@ -29,9 +33,20 @@ async def name_back(ctx):
     :param ctx:
     :return:
     """
-    general_channel = client.get_channel(1022194900982308977)
+    general_channel = client.get_channel(general_chan)
     await general_channel.send(ctx.author)
     print(ctx.author)
 
+@client.command(name="d6")
+async def name_back(ctx):
+    """
+    When you do "!6" command, return a value between 1 and 6
+    :param ctx:
+    :return:
+    """
+    result = random.randint(1, 6)
+    general_channel = client.get_channel(general_chan)
+    await general_channel.send("The result of your d6 is " + str(result) + " Dr.Freeman")
+    return result
 
 client.run(os.getenv("TOKEN"))  # Starts the bot
